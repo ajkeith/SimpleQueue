@@ -15,7 +15,10 @@ options(scipen = 999)
 seed = 1269
 set.seed(seed)
 
-settings <- read_csv("design_v18.csv")
+fn_in = "filename_input"
+fn_out = "filename_output"
+
+settings <- read_csv(fn_in)
 
 n_runs <- length(settings$`Estimation Method`)
 
@@ -25,42 +28,6 @@ n_cust <- 1000
 lambda <- 20
 norm_var <- 3
 a <- 1
-
-# rho <- 0.95
-# n_server <- 2
-# mu <- (lambda/(n_server*rho))
-# a_t <- 1
-# 
-# n_cust = 100000
-# x <- 1:n_cust
-# d_exp <- rexp(n_cust, lambda)
-# d_lognormal <- rlnorm(n_cust, log((1/lambda)) - norm_var/2, sqrt(norm_var))
-# d_beta <- rbeta(n_cust, a_t, (a_t / (1/lambda)) - a_t)
-# d_unif <- runif(n_cust, 0, 2*(1/lambda))
-# df <- as.tibble(data.frame(x, d_exp, d_lognormal, d_beta, d_unif))
-# df2 <- df %>%
-#   gather('d_exp','d_lognormal','d_beta','d_unif', key = 'distribution', value = 'time')
-# mean(d_exp)
-# mean(d_beta)
-# mean(d_unif)
-# mean(d_lognormal)
-# 
-# df2 %>%
-#   ggplot() +
-#   geom_density(aes(time, color = distribution)) +
-#   scale_x_continuous(limits = c(0,0.3)) +
-#   scale_y_continuous(limits = c(0,12)) +
-#   labs(title = 'Service Distributions', x = 'Service Time', y = 'Density')
-
-# df2 %>%
-#   ggplot() +
-#   geom_density(aes(time)) +
-#   facet_wrap( ~ distribution, scales = 'free')
-# df2 %>%
-  # filter(distribution == 'd_lognormal') %>%
-  # ggplot() +
-  # geom_density(aes(time)) +
-  # scale_x_continuous(limits = c(0,0.3))
 
 for (i in 1:n_runs){
   n_server <- settings[i,5][[1]]
@@ -124,7 +91,6 @@ for (i in 1:n_runs){
     mutate(depart_order = d_order[[1]]) %>%
     mutate(arrive_order = 1:length(depart_order))
   
-  fn <- str_c("C:/Users/op/Google Drive/02 - School/AFIT/Research/QueueInference.jl/QueueOutv18/out",i,".csv")
-  
-  write_csv(result,fn)
+ 
+  write_csv(result,fn_out)
 }
